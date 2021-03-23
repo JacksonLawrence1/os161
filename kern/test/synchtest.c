@@ -255,8 +255,7 @@ locktest(int nargs, char **args)
 	(void)args;
 
 	int i, result;
-
-	kprintf_n("Starting lt1...\n");
+	kprintf_n("HELLO, Starting lt1...\n");
 	for (i=0; i<CREATELOOPS; i++) {
 		kprintf_t(".");
 		testlock = lock_create("testlock");
