@@ -131,6 +131,7 @@ semtest(int nargs, char **args)
 		}
 	}
 	spinlock_init(&status_lock);
+
 	test_status = TEST161_SUCCESS;
 
 	kprintf_n("If this hangs, it's broken: ");
@@ -255,7 +256,7 @@ locktest(int nargs, char **args)
 	(void)args;
 
 	int i, result;
-	kprintf_n("HELLO, Starting lt1...\n");
+	kprintf_n("Starting lt1...\n");
 	for (i=0; i<CREATELOOPS; i++) {
 		kprintf_t(".");
 		testlock = lock_create("testlock");
@@ -271,17 +272,22 @@ locktest(int nargs, char **args)
 			sem_destroy(donesem);
 		}
 	}
+
 	spinlock_init(&status_lock);
+
 	test_status = TEST161_SUCCESS;
 
 	for (i=0; i<NTHREADS; i++) {
 		kprintf_t(".");
+
 		result = thread_fork("synchtest", NULL, locktestthread, NULL, i);
 		if (result) {
 			panic("lt1: thread_fork failed: %s\n", strerror(result));
 		}
 	}
+
 	for (i=0; i<NTHREADS; i++) {
+
 		kprintf_t(".");
 		P(donesem);
 	}
@@ -290,6 +296,7 @@ locktest(int nargs, char **args)
 	sem_destroy(donesem);
 	testlock = NULL;
 	donesem = NULL;
+
 
 	kprintf_t("\n");
 	success(test_status, SECRET, "lt1");
